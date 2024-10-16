@@ -73,7 +73,7 @@ class BulkUpload extends Controller
             ->whereIn('id', explode(',', $request->cp1))
             //  ->where('is_exist',0)
             ->count(); 
-          dd($MoveToCommmonPollCount);
+         
           // dd($MoveToCommmonPollCount);
             // dd($leadSheetsIsNoCount);
             // Explode comma-separated IDs from the input

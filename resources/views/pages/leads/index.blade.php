@@ -20,7 +20,7 @@
         #demo-foo-filtering_length{
             display: none;
         }
-       /*  #demo-foo-filtering_paginate{
+       /*   #demo-foo-filtering_paginate{
             display: none;
         } */
     </style>
@@ -230,15 +230,13 @@
                             ->where('assign_employee_id', '=', $empId->id)
                             ->where('common_pool_status', 0)
                             ->count();
-
-                            $coFollowsUpCount = DB::table('leads')
+                            
+                         $coFollowsUpCount = DB::table('leads')
                                     // ->where('assign_employee_id', '=', $empId->id) 
                                     ->where('common_pool_status', 0)
                                     ->where('co_follow_up', $empIdStatus->user_id)
                                     ->whereNotIn('lead_status', [8, 9, 10, 11, 12,14,16])
                                     ->count();
-
-                               
 
                         $empIdD = DB::table('employees')
                             ->where('user_id', Auth::user()->id)
@@ -564,10 +562,11 @@
                                     ->where('assign_employee_id', $IsStatusID)
                                     ->where('lead_status', $item->id)
                                     ->where('common_pool_status', 0)
-                                    ->orWhere('co_follow_up', $empIdStatus->user_id)
-                                    ->whereNotIn('lead_status', [8, 9, 10, 11, 12,14,16])
+                                   ->orWhere('co_follow_up', $empIdStatus->user_id)
+                                    ->whereNotIn('lead_status', [8, 9, 10, 11, 12])
                                     ->count();
- 
+
+                               
 
                                 $rwaCount = 0; 
                                 $empRwaID = DB::table('leads')
@@ -944,7 +943,8 @@
                                                     data-target="#LeadIntractionModal{{ $lead->id }}">
                                                     @if ($lead->lead_status == 1)
                                                         <span class="badge badge-warning rounded-circle" title="New Lead">
-                                                            {{ $timeDifferenceNew->days .  'sa' }} 
+                                                            {{ $timeDifferenceNew->days }}
+
                                                         </span>
                                                     @elseif($givenDateTime > $currentDateTime)
                                                         <i class="fa fa-circle text-success"
@@ -952,7 +952,7 @@
                                                     @elseif ($givenDateTime < $currentDateTime)
                                                         <span class="badge badge-danger rounded-circle"
                                                             title="Next Follow-Up Time Lapsed">
-                                                            {{ $timeDifference->days  }}
+                                                            {{ $timeDifference->days }}
                                                         </span>
                                                     @endif
                                                     {{ $lead->lead_name }}
@@ -972,14 +972,16 @@
                                                     @if ($lead->lead_status == 1)
                                                         <span class="badge badge-warning rounded-circle" title="New Lead">
                                                             {{ $timeDifferenceNew->days }}
+
+
                                                         </span>
                                                     @elseif($givenDateTime > $currentDateTime)
                                                         <i class="fa fa-circle text-success"
                                                             title="Next Follow-Up Time "></i>
                                                     @elseif ($givenDateTime < $currentDateTime)
-                                                        <span id="timeDifference11" class="badge badge-danger rounded-circle"
+                                                        <span class="badge badge-danger rounded-circle"
                                                             title="Next Follow-Up Time Lapsed">
-                                                            {{ $timeDifference->days . '12345' }}
+                                                            {{ $timeDifference->days }}
                                                         </span>
                                                     @endif
                                                     {{ $lead->lead_name }}
@@ -1023,6 +1025,9 @@
                                                             $country_code_emp = $country_code_emp = substr($lead->emp_country_code, 1);
                                                         }
 
+                                                        $NumberEmp = DB::table('employees')
+                                                        ->where('id',$lead->assign_employee_id)->first();
+
                                                         // if (empty($country_code_emp) || count($country_code_emp) < 2) {
                                                         //     // Handle the case where the array is empty or doesn't have at least two elements
 //     // You can assign a default value or handle it according to your requirement
@@ -1034,10 +1039,14 @@
                                                     @endphp
 
                                                     {{  $lead->employee_name  }}
-                                                    <a href="https://api.whatsapp.com/send/?phone={{ $country_code_emp[1] }}{{ $lead->official_phone_number }}"
+                                                    <a href="https://api.whatsapp.com/send/?phone={{ ltrim($NumberEmp->emp_country_code, '+')}}{{ $NumberEmp->official_phone_number }}"
                                                         target="_blank">
                                                         <i class="mdi mdi-whatsapp" aria-hidden="true"></i>
                                                     </a>
+                                                    {{-- <a href="https://api.whatsapp.com/send/?phone={{ $country_code_emp[1] }}{{ $lead->official_phone_number }}"
+                                                        target="_blank">
+                                                        <i class="mdi mdi-whatsapp" aria-hidden="true"></i>
+                                                    </a> --}}
                                                     @if (!empty($whatsappUrl))
                                                     @else
                                                         <!-- Add alternative content or handle the case when WhatsApp URL is not available -->
@@ -1151,7 +1160,7 @@
                                                     </td>
                                                 @endif
 
-                                                <td> 
+                                                <td>
                                                     @php
                                                         $existingProject = DB::table('projects')
                                                             ->select('project_name', 'id')
@@ -1194,7 +1203,7 @@
                                                         {{ $leadStatusName->name }}
                                                     </td>
                                                 @endif
-
+                                                
                                                 <td class="d-none">
                                                     {{ $lead-> customer_interaction }}
                                                 </td>
@@ -2153,43 +2162,28 @@
     </script>
     
     <script>
-   $(document).ready(function() {
-    // Check if the user role is 1 (from Blade)
-    @if(Auth::user()->roles_id == 1)
-        let tableId = '#demo-foo-filtering';
-    @else
-        let tableId = ''; // Assign an empty string or another table ID as needed
-    @endif
+    $(document).ready(function() {
+        // Check if the user role is 1 (from Blade)
+        @if(Auth::user()->roles_id == 1)
+            let tableId = '#demo-foo-filtering';
+        @else
+            let tableId = ''; // Assign an empty string or another table ID as needed
+        @endif
 
-    // Initialize DataTable if tableId is set
-    if (tableId !== '') {
-        $(tableId).DataTable({
-            dom: 'Bfrtip', // Include buttons
-            buttons: [
-                {
-                    extend: 'excel',
-                    text: 'Excel',
-                    className: 'btn btn-primary', // Apply Bootstrap primary button class
-                    action: function (e, dt, button, config) {
-                           // Log to console to check if the element is being selected
-                        console.log($('#timeDifference11')); // Check if the element is found
-                        
-                        // Force hide the element using CSS (with !important)
-                        $('#timeDifference11').css('display', 'none').prop('hidden', true); // Use both methods to ensure hiding
-                        
-                        // Trigger the alert for demonstration
-                        alert('hello');
-
-                        // Call the default Excel export action
-                        $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
-
+        // Initialize DataTable if tableId is set
+        if (tableId !== '') {
+            $(tableId).DataTable({
+                dom: 'Bfrtip', // Include buttons
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-primary' // Apply Bootstrap primary button class
                     }
-                }
-            ],
-        }); 
-    }
-});
-
+                ],
+            });
+        }
+    });
 </script>
 
     <script>
