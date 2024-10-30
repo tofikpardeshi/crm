@@ -147,11 +147,11 @@
                             </tbody>
                         </table>
                     </div>
-                      {{-- @if(method_exists($Developers, 'links')) 
+                     @if(method_exists($GlobalSearchs, 'links')) 
                      <ul class="pagination pagination-rounded justify-content-end mb-0 mt-2">
-                        {{ $Developers->links('pagination::bootstrap-4'); }}
+                        {{ $GlobalSearchs->links('pagination::bootstrap-4'); }}
                     </ul> 
-                    @endif --}}
+                    @endif 
                 </div>
             </div>
         </div>
@@ -165,6 +165,9 @@
     #demo-foo-filtering_length{
         display: none;
     }
+      #demo-foo-filtering_paginate{
+            display: none;
+        } 
 </style>
 <script>
     // $('#demo-foo-filtering').dataTable( {

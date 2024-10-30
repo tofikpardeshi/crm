@@ -250,7 +250,7 @@ Route::group(['middleware' => ['auth','lock']], function(){
     
     ////Common Pool Update
     Route::get('/common-pool', [CommonPoll::class, 'index'])->name('common-pool');
-    Route::post('/common-pool-by-filter', [CommonPoll::class, 'FilterLeadByCommonPool'])->name('filter-lead-by-commonpool'); 
+    Route::match(['get', 'post'],'/common-pool-by-filter', [CommonPoll::class, 'FilterLeadByCommonPool'])->name('filter-lead-by-commonpool'); 
     Route::get('/common-pool-filter', [CommonPoll::class, 'LeadFilters'])->name('common-pool-filter');
     Route::post('/employee-assing-comoon-poll', [CommonPoll::class, 'EmployeeAssingComoonPoll'])->name('employee-assing-comoon-poll');
     Route::POST('/assign-common-pool', [CommonPoll::class, 'AssignCommonPool'])->name('assign-common-pool');

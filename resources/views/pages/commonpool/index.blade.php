@@ -74,7 +74,7 @@
                                                     ->select('name','roles_id','id')
                                                     ->get();
                                             @endphp
-                                            <form action="{{ route('filter-lead-by-commonpool') }}" method="post">
+                                            <form action="{{ route('filter-lead-by-commonpool') }}" method="GET">
                                                 @csrf
                                                   <div class="form-group mb-3">
                                                     <label for="example-email">Customer Type<span
@@ -315,23 +315,23 @@
                                         
                                 </div>
 
-                                <div class="col-md-3 col-sm-6 col-6 mb-1">
+                                {{-- <div class="col-md-3 col-sm-6 col-6 mb-1">
                                     <label for="">Date follow up</label>
                                     <td><input type="date" class="form-control" id="datefilterfrom"
                                             data-date-split-input="true" min="<?= date('d-m-Y') ?>"
-                                            {{-- onchange="FollowUpDateApplyFilter()" --}}
+                                            onchange="FollowUpDateApplyFilter()" 
                                             name="dateFollowUp"
                                             ></td>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-6 mb-1">
+                                </div> --}}
+                                {{-- <div class="col-md-3 col-sm-6 col-6 mb-1">
                                     <label for="">Creation Date</label>
                                     <td><input type="date" class="form-control" id="creation-date"
                                             data-date-split-input="true" min="<?= date('d-m-Y') ?>"
                                             name="creationDate"
-                                            {{-- onchange="CreateDateApplyFilter()" --}}
+                                             onchange="CreateDateApplyFilter()" 
                                             >
                                         </td> 
-                                </div>
+                                </div> --}}
 
                                  
                                 <div class="col-md-3 col-sm-6 col-6 mb-1">

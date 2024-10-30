@@ -4083,8 +4083,10 @@ class LeadsController extends Controller
 	 public function globalSearchDetails()
 	    {
 
-		$GlobalSearchs = DB::table('global_search')
-        	->orderBy('created_at','desc')->get();
+            
+            $GlobalSearchs = DB::table('global_search')
+            ->orderBy('created_at', 'desc')
+            ->paginate(200);
 		return view('pages.admin.global-search',compact(['GlobalSearchs']));
 	    }
 	    

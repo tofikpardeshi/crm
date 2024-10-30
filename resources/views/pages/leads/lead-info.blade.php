@@ -625,14 +625,22 @@
                                         // dd($country_code[1]);
                                     }
                                     
+                                    $NumberEmp = DB::table('employees')
+                                    ->where('id',$leads->assign_employee_id)->first();
+                                    
                                 @endphp
 
                                 <div class="my-1">Lead Assigned To: <strong>{{ $leads->employee_name }}</strong>
-                                     
-                                    <a href="https://api.whatsapp.com/send/?phone={{ $country_code[1] . $leads->official_phone_number }}"
+                                     <a href="https://api.whatsapp.com/send/?phone={{ ltrim($NumberEmp->emp_country_code, '+') . 
+                                     $NumberEmp->official_phone_number }}"
                                         target="_blank">
                                         <i class="mdi mdi-whatsapp" aria-hidden="true"></i>
                                     </a>
+                                     
+                                    {{-- <a href="https://api.whatsapp.com/send/?phone={{ $country_code[1] . $leads->official_phone_number }}"
+                                        target="_blank">
+                                        <i class="mdi mdi-whatsapp" aria-hidden="true"></i>
+                                    </a> --}}
                                 </div>
 
 
@@ -1348,4 +1356,3 @@
         });
     </script>
 @endsection
-
